@@ -1,7 +1,9 @@
 import { Plugin } from 'obsidian';
 
-const FITB_HEAD = "--"
-const FITB_TAIL = "--"
+const FITB_START = "--"
+const FITB_STOP  = "--"
+const FITB_START_SIZE = FITB_START.length
+const FITB_STOP_SIZE  = FITB_STOP.length
 
 export default class FillInTheBlankPlugin extends Plugin {
 
@@ -21,26 +23,26 @@ export default class FillInTheBlankPlugin extends Plugin {
           b = c
         }
         const
-          c = {...a, ch: Math.max(a.ch - FITB_HEAD.length,                             0)},
-          d = {...b, ch: Math.min(b.ch + FITB_TAIL.length, editor.getLine(b.line).length)},
+          c = {...a, ch: Math.max(a.ch - FITB_START_SIZE,                            0)},
+          d = {...b, ch: Math.min(b.ch + FITB_STOP_SIZE, editor.getLine(b.line).length)},
           slim = editor.getRange(a, b),
           wide = editor.getRange(c, d);
         
-        if(slim.startsWith(FITB_HEAD) && slim.endsWith(FITB_TAIL)) {
-          editor.replaceRange(slim.substring(FITB_HEAD.length, slim.length - FITB_TAIL.length), a, b)
-          editor.setSelection(a, {...b, ch: b.ch - FITB_HEAD.length - FITB_TAIL.length})
+        if(slim.startsWith(FITB_START) && slim.endsWith(FITB_STOP)) {
+          editor.replaceRange(slim.substring(FITB_START_SIZE, slim.length - FITB_STOP_SIZE), a, b)
+          editor.setSelection(a, {...b, ch: b.ch - FITB_START_SIZE - FITB_STOP_SIZE})
           return
         }
-        if(wide.startsWith(FITB_HEAD) && wide.endsWith(FITB_TAIL)) {
+        if(wide.startsWith(FITB_START) && wide.endsWith(FITB_STOP)) {
           editor.replaceRange(slim, c, d)
-          editor.setSelection(c, {...d, ch: d.ch - FITB_HEAD.length - FITB_TAIL.length})
+          editor.setSelection(c, {...d, ch: d.ch - FITB_START_SIZE - FITB_STOP_SIZE})
           return
         }
 
-        editor.replaceRange(`${FITB_HEAD}${slim}${FITB_TAIL}`, a, b)
+        editor.replaceRange(`${FITB_START}${slim}${FITB_STOP}`, a, b)
         editor.setSelection(
-          { ...a, ch: a.ch + FITB_HEAD.length },
-          { ...b, ch: b.ch + FITB_HEAD.length }
+          { ...a, ch: a.ch + FITB_START_SIZE },
+          { ...b, ch: b.ch + FITB_START_SIZE }
         )
       }
     })
@@ -52,15 +54,15 @@ export default class FillInTheBlankPlugin extends Plugin {
     this.registerMarkdownPostProcessor((element, context) => {
       const items = element.querySelectorAll("p, h1, h2, h3, h4, h5, code");
       items.forEach((item: HTMLElement) => {
-        while(item.innerText.indexOf(FITB_HEAD) >= 0 && item.innerText.indexOf(FITB_TAIL) >= 0) {
+        while(item.innerText.indexOf(FITB_START) >= 0 && item.innerText.indexOf(FITB_STOP) >= 0) {
           const 
-            a = item.innerText.indexOf(FITB_HEAD       ),
-            b = item.innerText.indexOf(FITB_TAIL, a + 1);
+            a = item.innerText.indexOf(FITB_START       ),
+            b = item.innerText.indexOf(FITB_STOP, a + 1);
           if(b === -1) break;
           const
             fitb = context.frontmatter?.fitb ?? true,
-            hide = item.innerText.substring(a, b + FITB_HEAD.length),
-            show = hide.substring(2, hide.length - FITB_TAIL.length).split(/\s+/g).map((word) => {
+            hide = item.innerText.substring(a, b + FITB_START_SIZE),
+            show = hide.substring(FITB_START_SIZE, hide.length - FITB_STOP_SIZE).split(/\s+/g).map((word) => {
               return fitb ? this.blankify(word) : word
             }).join("  ")
 
