@@ -1,7 +1,7 @@
 {
   "id": "fill-in-the-blank",
   "name": "Fill in the Blank (FITB)",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "minAppVersion": "0.15.0",
   "description": "Use --magic-- to render inline text as blank line(s) instead.",
   "author": "Shawn McGee",

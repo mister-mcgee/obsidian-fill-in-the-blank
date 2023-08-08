@@ -52,12 +52,12 @@ export default class FillInTheBlankPlugin extends Plugin {
     })
 
     this.registerMarkdownPostProcessor((element, context) => {
-      const items = element.querySelectorAll("p, h1, h2, h3, h4, h5, li, code");
+      const items = element.querySelectorAll("p, h1, h2, h3, h4, h5, li, td, th, code");
       items.forEach((item: HTMLElement) => {
         while(item.innerText.indexOf(FITB_START) >= 0 && item.innerText.indexOf(FITB_STOP) >= 0) {
           const 
             a = item.innerText.indexOf(FITB_START       ),
-            b = item.innerText.indexOf(FITB_STOP, a + 1);
+            b = item.innerText.indexOf(FITB_STOP , a + 1);
           if(b === -1) break;
           const
             fitb = context.frontmatter?.fitb ?? true,
