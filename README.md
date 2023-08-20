@@ -13,10 +13,3 @@ fitb: false
 ```
 
 To quickly toggle FITB inline using a command (similar to `**Bold**` or `*Italics*`), highlight the target text and select the FITB icon in the ribbon. OR bind the `fill-in-the-blank:toggle` command to a hotkey in `Settings -> Hotkeys`.
-
-### Installation
-1. Download and unzip the current release into your vault's `.obsidian/plugins` directory, creating one if it does not exist already.
-2. Inside of Obsidian select `Settings -> Community Plugins` and turn off Restricted Mode if you haven't already done so.
-3. Enable the `Fill in the Blank (FITB)` plugin.
-
-
