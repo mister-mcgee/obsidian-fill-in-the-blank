@@ -13,4 +13,4 @@ To enable or disable FITB while still allowing the post-processor to consume the
 fitb: false
 ---
 ```
-You may need to reopen/reload the preview window to see frontmatter changes take effect.
+⚠️ You may need to reopen/reload the preview window to see frontmatter changes take effect.
