@@ -54,19 +54,19 @@ export default class FillInTheBlankPlugin extends Plugin {
     this.registerMarkdownPostProcessor((element, context) => {
       const items = element.querySelectorAll("p, h1, h2, h3, h4, h5, li, td, th, code");
       items.forEach((item: HTMLElement) => {
-        while(item.innerText.indexOf(FITB_START) >= 0 && item.innerText.indexOf(FITB_STOP) >= 0) {
+        while(item.innerHTML.indexOf(FITB_START) >= 0 && item.innerHTML.indexOf(FITB_STOP) >= 0) {
           const 
-            a = item.innerText.indexOf(FITB_START       ),
-            b = item.innerText.indexOf(FITB_STOP , a + 1);
+            a = item.innerHTML.indexOf(FITB_START       ),
+            b = item.innerHTML.indexOf(FITB_STOP , a + 1);
           if(b === -1) break;
           const
             fitb = context.frontmatter?.fitb ?? true,
-            hide = item.innerText.substring(a, b + FITB_START_SIZE),
+            hide = item.innerHTML.substring(a, b + FITB_START_SIZE),
             show = hide.substring(FITB_START_SIZE, hide.length - FITB_STOP_SIZE).split(/\s+/g).map((word) => {
               return fitb ? this.blankify(word) : word
             }).join("  ")
 
-          item.innerText = item.innerText.replace(hide, show)
+          item.innerHTML = item.innerHTML.replace(hide, show)
         }
       })
     })
